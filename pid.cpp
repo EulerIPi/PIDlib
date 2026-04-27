@@ -11,46 +11,61 @@ PID(float kp, float ki, float kd, float constReset = 5000.0f, float MAXall = 999
 }
 
 float PID::limitter(float val, float lim){
-    return (val > lim || -val < -lim)? lim : val;
+    if(val > lim){
+        return lim;
+    }else if(val < -lim){
+        return -lim;
+    }
+    return val;
 }
 
 float PID::get(float set, float ret){
+    if(set - setAnt > constReset || setAnt - set > constReset){
+        for(int i = 0; i< BUFFER_SIZE; i++) buffer[i] = 0.0f;
+        start = true;
+        errorAnt = 0.0f;
+        auxInteg = 0;
+        fullBuffer = 0;
+        count = 0;
+    }
+    setAnt = set;
+    
     error = set - ret;
     time = millis();
     deltaT = time - timeAnt;
     timeAnt = time;
 
-    if(error > constReset){
-        for(int i = 0; i< BUFFER_SIZE; i++) buffer[i] = 0.0f;
-        start = true;
-        errorAnt = 0.0f;
-    }
-
     //Proportional:
-    prop = constrainPID(kp*error, MAXp);
-    
+    prop = limitter(kp*error, MAXp);
+
     //Integrative:
 
     if(fullBuffer < BUFFER_SIZE){
         fullBuffer++;
-        integ += error*deltaT;
+        auxInteg += error*deltaT;
     }else{
-        integ += error*deltaT;
-        integ -= buffer[count];
+        auxInteg += error*deltaT;
+        auxInteg -= buffer[count];
     }
     buffer[count] = error*deltaT;
-    integ = constrainPID(integ*ki, MAXi);
+    integ = limitter(auxInteg*ki, MAXi);
+    
     //Derivative:
     if(start){
         der = 0.0f;
         start = false;
     }else if(deltaT == 0){
-        der = MAXd;
+        if(error > errorAnt){//+1/0 -> +Infinity
+            der = MAXd;
+        }else if(error < errorAnt){//-1/0 -> -Infinity
+            der = -MAXd;
+        }
+        //0/0 -> Undefined, keeps previous value
     }else{
-        der = constrainPID(kd*1000*(error - errorAnt)/deltaT, MAXd);
+        der = limitter(kd*1000*(error - errorAnt)/deltaT, MAXd);
     }
     
     errorAnt = error;
     count = (count+1)%BUFFER_SIZE;
-    return constrainPID(prop + integ + der, MAXall);
+    return limitter(prop + integ + der, MAXall);
 }
