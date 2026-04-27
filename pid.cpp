@@ -1,24 +1,9 @@
-#define BUFFER_SIZE 500
-class pid{
-    private:
-        float buffer[BUFFER_SIZE];
-        float kp, ki, kd;
-        uint count = 0;
-        unsigned long timeAnt = 0, time;
-        uint fullBuffer = 0;
-        bool inicio = true;
-        float error, prop, integ = 0, der;
-        float errorAnt = 0;
-    public:
-        pid(float kp, float ki, float kd){
-            this->kd = kd;
-            this->ki = ki;
-            this->kp = kp;
-            for(int i = 0; i< BUFFER_SIZE; i++) buffer[i] = 0.0f;
-        }
-        float get(float set, float ret);
-};
-
+pid(float kp, float ki, float kd){
+    this->kd = kd;
+    this->ki = ki;
+    this->kp = kp;
+    for(int i = 0; i< BUFFER_SIZE; i++) buffer[i] = 0.0f;
+}
 
 float pid::get(float set, float ret){
     error = set - ret;
