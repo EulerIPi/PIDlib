@@ -22,8 +22,7 @@ class PID{
       D,
       ALL
     }PID_TYPE;
-    void limiter(float *val, PID_TYPE);
-    void reset();    
+    float PID::limitter(float val, float lim)
   public:
     PID(float kp, float ki, float kd, float constReset = 5000.0f, float MAXall = 9999.0f, float MAXp = 9999.0f, float MAXi = 9999.0f, float MAXd = 9999.0f);
     float get(float set, float ret);
