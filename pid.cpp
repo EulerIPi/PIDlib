@@ -10,7 +10,7 @@ PID(float kp, float ki, float kd, float constReset = 5000.0f, float MAXall = 999
     for(int i = 0; i< BUFFER_SIZE; i++) buffer[i] = 0.0f;
 }
 
-float PID::constrainPID(float val, float lim){
+float PID::limitter(float val, float lim){
     return (val > lim || -val < -lim)? lim : val;
 }
 
