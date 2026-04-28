@@ -14,15 +14,8 @@ class PID{
     bool start = true;
     float errorAnt = 0, error, deltaT = 0;
     float auxInteg;
-    float out;
     float setAnt = 0.0f, constReset;
-    typedef enum{
-      P,
-      I,
-      D,
-      ALL
-    }PID_TYPE;
-    float limitter(float val, float lim)
+    float limitter(float val, float lim);
   public:
     PID(float kp, float ki, float kd, float constReset = 5000.0f, float MAXall = 9999.0f, float MAXp = 9999.0f, float MAXi = 9999.0f, float MAXd = 9999.0f);
     float get(float set, float ret);
