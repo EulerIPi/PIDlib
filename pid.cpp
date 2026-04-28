@@ -8,6 +8,10 @@ PID(float kp, float ki, float kd, float constReset = 5000.0f, float MAXall = 999
     this-> MAXi = MAXi;
     this-> MAXd = MAXd;
     for(int i = 0; i< BUFFER_SIZE; i++) buffer[i] = 0.0f;
+    auxInteg = 0.0f;
+    fullBuffer = 0;
+    count = 0;
+    integ = 0.0f;
 }
 
 float PID::limitter(float val, float lim){
@@ -54,14 +58,7 @@ float PID::get(float set, float ret){
     if(start){
         der = 0.0f;
         start = false;
-    }else if(deltaT == 0){
-        if(error > errorAnt){//+1/0 -> +Infinity
-            der = MAXd;
-        }else if(error < errorAnt){//-1/0 -> -Infinity
-            der = -MAXd;
-        }
-        //0/0 -> Undefined, keeps previous value
-    }else{
+    }else if(deltaT != 0){
         der = limitter(kd*1000*(error - errorAnt)/deltaT, MAXd);
     }
     
