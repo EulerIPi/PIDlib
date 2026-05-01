@@ -43,7 +43,10 @@ float PID::get(float set, float ret){
     prop = limitter(kp*error, MAXp);
 
     //Integrative:
-    if(fullBuffer < BUFFER_SIZE){
+    if(fullBuffer == 0){
+        fullBuffer++;
+        auxInteg += error*deltaT;
+    }else if(fullBuffer < BUFFER_SIZE){
         fullBuffer++;
         auxInteg += (error+errorAnt)*deltaT*0.2f;
     }else{
