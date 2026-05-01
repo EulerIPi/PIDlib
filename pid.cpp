@@ -1,4 +1,4 @@
-PID::PID(float kp, float ki, float kd, float constReset = 5000.0f, float MAXall = 9999.0f, float MAXp = 9999.0f, float MAXi = 9999.0f, float MAXd = 9999.0f){
+PID::PID(float kp, float ki, float kd, float constReset, float MAXall, float MAXp, float MAXi, float MAXd){
     this->kd = kd;
     this->ki = ki;
     this->kp = kp;
