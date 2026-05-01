@@ -7,12 +7,12 @@ class PID{
   private:
     uint16_t count = 0, fullBuffer = 0;
     float buffer[BUFFER_SIZE];
-    float prop, integ = 0, der;
+    float prop, integ = 0.0f, der;
     float kp, ki, kd;
     float MAXp, MAXi, MAXd, MAXall;
     unsigned long timeAnt = 0, time;
     bool start = true;
-    float errorAnt = 0, error, deltaT = 0;
+    float errorAnt = 0.0f, error, deltaT = 0.0f;
     float auxInteg;
     float setAnt = 0.0f, constReset;
     float limitter(float val, float lim);
